@@ -11,7 +11,7 @@ final class MousecopOverlay {
             backing: .buffered,
             defer: false
         )
-        window.level = .screenSaver
+        window.level = .floating
         window.alphaValue = 0.5
         window.ignoresMouseEvents = true
         window.backgroundColor = .red

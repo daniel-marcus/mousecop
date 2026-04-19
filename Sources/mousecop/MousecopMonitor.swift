@@ -4,7 +4,9 @@ import Observation
 @MainActor
 @Observable
 final class MousecopMonitor {
-    var enabled = true
+    var monitoredBundleIDs: Set<String> = Set(UserDefaults.standard.stringArray(forKey: "monitoredBundleIDs") ?? []) {
+        didSet { UserDefaults.standard.set(Array(monitoredBundleIDs), forKey: "monitoredBundleIDs") }
+    }
 
     private let overlay = MousecopOverlay()
     private var eventMonitor: Any?
@@ -19,7 +21,8 @@ final class MousecopMonitor {
     }
 
     private func handleMouseEvent() {
-        guard enabled else { return }
+        guard let frontmost = NSWorkspace.shared.frontmostApplication?.bundleIdentifier,
+              monitoredBundleIDs.contains(frontmost) else { return }
         hideTimer?.invalidate()
         hideTimer = Timer.scheduledTimer(withTimeInterval: 0.3, repeats: false) { [weak self] _ in
             MainActor.assumeIsolated { self?.overlay.hide() }
@@ -27,8 +30,7 @@ final class MousecopMonitor {
         overlay.show()
     }
 
-    func toggle() {
-        enabled.toggle()
-        if !enabled { overlay.hide() }
+    func toggleMonitored(_ bundleID: String) {
+        monitoredBundleIDs.formSymmetricDifference([bundleID])
     }
 }
