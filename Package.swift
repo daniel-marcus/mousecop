@@ -1,4 +1,4 @@
-// swift-tools-version: 6.2
+// swift-tools-version: 6.3
 import PackageDescription
 
 let package = Package(
@@ -8,6 +8,6 @@ let package = Package(
         .executableTarget(
             name: "mousecop",
             path: "Sources/mousecop"
-        )
+        ),
     ]
 )
