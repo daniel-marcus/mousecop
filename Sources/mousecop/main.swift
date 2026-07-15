@@ -30,6 +30,15 @@ struct MousecopApp: App {
 
             Divider()
 
+            Text(String(format: "%.1f touches per minute (%d total)", monitor.touchesPerMinute, monitor.touchCount))
+                .foregroundStyle(.secondary)
+
+            Button("Reset Counter") {
+                monitor.resetCounter()
+            }
+
+            Divider()
+
             Button("Quit", role: .destructive) {
                 NSApplication.shared.terminate(nil)
             }
@@ -43,7 +52,11 @@ struct MousecopApp: App {
     }
 
     private func icon(_ nsImage: NSImage?) -> Image {
-        if let img = nsImage { Image(nsImage: img) } else { Image(systemName: "app.dashed") }
+        if let img = nsImage {
+            Image(nsImage: img)
+        } else {
+            Image(systemName: "app.dashed")
+        }
     }
 }
 
